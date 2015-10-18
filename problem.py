@@ -1,6 +1,3 @@
-import numpy as np
-
-
 class Problem(object):
     """Description of problem to solve"""
 

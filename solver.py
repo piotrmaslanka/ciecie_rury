@@ -2,7 +2,6 @@
 from genotype import Genotype
 from copy import copy
 import random
-import numpy as np
 
 class GeneticSolver(object):
     """Rozwiazywacz problemu"""
