@@ -76,15 +76,14 @@ class Genotype(object):
         for i in xrange(0, (self.degeneracy // 2)+1):
 
             while True:
-                a, b, c = pickindex(), pickindex(), pickindex()
+                a, b = pickindex(), pickindex()
 
-                if self.elements[a] == self.elements[b] == self.elements[c]:
+                if self.elements[a] == self.elements[b]:
                     continue
 
                 a_ = self.elements[a]
                 self.elements[a] = self.elements[b]
-                self.elements[b] = self.elements[c]
-                self.elements[c] = a_
+                self.elements[b] = a_
 
                 break
 
