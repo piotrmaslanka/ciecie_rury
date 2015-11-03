@@ -39,15 +39,16 @@ class GeneticSolver(object):
         for winnar in winning_population[:self.population_size-len(new_population)]:
             osob = winnar.copy()
             osob.mutate()
-            osob.mutate()
-            osob.evaluate_fitness
+            winnar.degenerate()
+            osob.evaluate_fitness()
             new_population.append(osob)
 
         while len(new_population) < self.population_size:
             # ok. Dopoki nie ma wystarczajacej ilosc osobnikow, zrob typa
-            osob = random.choice(winning_population).copy()
+            rc = random.choice(winning_population)
+            osob = rc.copy()
             osob.mutate()
-            osob.mutate()
+            rc.degenerate()
 
             osob.evaluate_fitness()
             new_population.append(osob)
