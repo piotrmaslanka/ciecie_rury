@@ -6,12 +6,12 @@ from random import random, choice, sample, randint
 class Genotype(object):
     __slots__ = ('elements', 'problem', 'fitness', 'stock_indices', 'degeneracy')
 
-    def __init__(self, elements, problem):
+    def __init__(self, indices, problem):
         """
-        :param elements: a genotype
+        :param indices: indices to elementy array in problem
         :type problem: Problem
         """
-        self.elements = elements
+        self.indices = indices
         self.problem = problem
         self.fitness = None
         self.stock_indices = []
@@ -22,28 +22,7 @@ class Genotype(object):
         """Calculates fitness, sets .fitness appropriately
         Fitness is, in this case, minus total waste
         Also fills in stock_indices"""
-        leftovers = 0
 
-        stock_size = self.problem.stock_size
-        currentsum = 0
-        stock_start = 0
-
-        self.stock_indices = [] # tuple of (stock_start, stock_index_stop (exclusive), waste)
-
-        for i, e in enumerate(self.elements):
-            if e + currentsum > stock_size:
-                # emit element, pass it as new one
-                self.stock_indices.append((stock_start, i, stock_size - currentsum))
-                leftovers += stock_size - currentsum
-                stock_start = i
-                currentsum = e
-            else:
-                currentsum += e
-
-        self.stock_indices.append((stock_start, self.problem.elements_size, stock_size-currentsum))
-        leftovers += stock_size - currentsum        # adjust for last processed element
-
-        self.fitness = -leftovers
 
     def copy(self):
         ":return: Genotype"
