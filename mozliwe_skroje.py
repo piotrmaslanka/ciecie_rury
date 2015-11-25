@@ -1,4 +1,7 @@
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    import numpypy as np
 from collections import deque
 
 def policz_mozliwe_skroje(dlugosc_substratu, dlugosci_produktow):

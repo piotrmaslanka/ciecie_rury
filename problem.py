@@ -1,4 +1,8 @@
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    import numpypy as np
+
 from mozliwe_skroje import policz_mozliwe_skroje
 
 
@@ -27,7 +31,7 @@ class Problem(object):
         self.dl_rek = len(self.mozliwe_sposoby_ciecia)  # dlugosc rekordow
 
     def print_(self):
-        print 'Problem do rozwiazania:\n  Przy nieskonczonej ilosci dluznic dlugosci %s okresl sposoby ciecia tak by uzyskac:' % (self.rozmiar_belki, )
+        print 'Problem do rozwiazania:\n  Przy nieskonczonej ilosci dluzyc dlugosci %s okresl sposoby ciecia tak by uzyskac:' % (self.rozmiar_belki, )
         for typ, ilosc in zip(self.typy_elementow, self.ilosc_elementow):
             print '   %s elementow o dlugosci %s' % (ilosc, typ)
         print '  minimalizujac resztki z ciecia'

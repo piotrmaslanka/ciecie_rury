@@ -12,6 +12,15 @@ Osobnik to wektor opisujacy ile rur trzeba przeznaczyc na i-ty sposob ciecia
 class Osobnik(object):
     __slots__ = ('rozkroj', 'problem', 'fitness')
 
+    def __repr__(self):
+        return "("+' '.join(map(str, self.rozkroj))+", "+str(self.fitness)+")"
+
+    def __eq__(self, other):
+        return (self.rozkroj == other.rozkroj).all()
+
+    def __hash__(self):
+        return reduce(lambda x, y: x ^ y, self.rozkroj)
+
     def __init__(self, osobnik_vector, problem):
         """
         :param osobnik_vector: lista - wektor osobnika
@@ -36,7 +45,7 @@ class Osobnik(object):
             leftovers += resztka * krotnosc
 
         if (belek_itego_rodzaju < self.problem.ilosc_elementow).any():
-            self.fitness = float('-inf')
+            self.fitness = -np.sum((2*self.problem.ilosc_elementow - belek_itego_rodzaju) * self.problem.typy_elementow)
             return
 
         # nadmiarowe belki musza zostac policzone jako straty
@@ -62,11 +71,19 @@ class Osobnik(object):
         return deepcopy(self)
 
     def mutate(self):
-        """Mutate this instance with probability xray"""
+        """Mutate this instance"""
 
-        index_to_mutate = np.random.randint(0, len(self.rozkroj))
+        q = random()
 
-        if random() > 0.5:
-            self.rozkroj[index_to_mutate] -= 1
-        else:
-            self.rozkroj[index_to_mutate] += 1
+        for i in xrange(0, 5):
+            f = np.random.randint(0, len(self.rozkroj))
+            q = random()
+
+            if q < 0.15:
+                pass
+            elif q < 0.6:
+                if self.rozkroj[f] > 0:
+                    self.rozkroj[f] -= 1
+            else:
+                self.rozkroj[f] += 1
+
