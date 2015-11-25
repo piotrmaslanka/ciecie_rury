@@ -12,10 +12,11 @@ GENERATIONS = 600
 
 CX_PROB = 0.3
 
+
 def solve(*args):
     problem = ProblemLoader('problem.txt')
     toolbox = create_toolbox(problem)
-    population = toolbox.population(n=10*POPULATION_SIZE)
+    population = toolbox.population(n=10 * POPULATION_SIZE)
     last_best_fitness, fitness_stuck_for, fitnesses = float('inf'), 0, []
 
     for i in xrange(0, GENERATIONS):
@@ -42,6 +43,7 @@ def solve(*args):
         for member in best:  # mutations of elites
             c1 = toolbox.clone(member)
             toolbox.mutate(c1)
+            for _ in xrange(0, fitness_stuck_for // 3):  toolbox.mutate(c1) # irradiation factor
             del c1.fitness.values
             population.append(member)
 
@@ -52,20 +54,20 @@ def solve(*args):
                 c1 = toolbox.clone(random.sample(best, 1)[0])
                 toolbox.mutate(c1)
 
-            for _ in xrange(0, fitness_stuck_for // 3):  # irradiation factor
-                toolbox.mutate(c1)
+            for _ in xrange(0, fitness_stuck_for // 3):  toolbox.mutate(c1) # irradiation factor
 
             del c1.fitness.values
             population.append(c1)
 
-    for ind, fit in map(toolbox.evaluate, population): ind.fitness.values = fit
+    for ind, fit in zip(population, map(toolbox.evaluate, population)): ind.fitness.values = fit
 
     sb, = tools.selBest(population, 1)
     return sb, sb.fitness.values[0], fitnesses
 
+
 if __name__ == '__main__':
-    res = list(futures.map(solve(_) for _ in xrange(0, 4)))
+    res = list(futures.map(solve, xrange(3)))
     fitnesses = [fit for sol, fit, fitnesses in res]
 
-    print 'Average fitness: %s of %s trials' % (sum(fitnesses)/len(fitnesses), len(fitnesses))
-    print 'Best fitness: %s' % (min(fitnesses), )
+    print 'Average fitness: %s of %s trials' % (sum(fitnesses) / len(fitnesses), len(fitnesses))
+    print 'Best fitness: %s' % (min(fitnesses),)
