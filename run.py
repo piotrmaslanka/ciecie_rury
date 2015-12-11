@@ -1,20 +1,20 @@
 from __future__ import division
+
 import random
 
 from deap import tools
-from scoop import futures
 
 from problem import ProblemLoader, create_toolbox
 
-POPULATION_SIZE = 60
-WIN_POPULATION_SIZE = 10
-GENERATIONS = 600
+POPULATION_SIZE = 300
+WIN_POPULATION_SIZE = 25
+GENERATIONS = 5000
 
-CX_PROB = 0.3
+CX_PROB = 0.7
 
 
 def solve(*args):
-    problem = ProblemLoader('problem.txt')
+    problem = ProblemLoader('problem2.txt')
     toolbox = create_toolbox(problem)
     population = toolbox.population(n=10 * POPULATION_SIZE)
     last_best_fitness, fitness_stuck_for, fitnesses = float('inf'), 0, []
@@ -55,19 +55,24 @@ def solve(*args):
                 toolbox.mutate(c1)
 
             for _ in xrange(0, fitness_stuck_for // 3):  toolbox.mutate(c1) # irradiation factor
-
             del c1.fitness.values
             population.append(c1)
 
+        if fitness_stuck_for > 50:
+            break
+
+        if i % 10 == 0:
+            print '%s completed, max fitness is %s, fsf is %s' % (i, best_fitness, fitness_stuck_for)
+
     for ind, fit in zip(population, map(toolbox.evaluate, population)): ind.fitness.values = fit
 
-    sb, = tools.selBest(population, 1)
-    return sb, sb.fitness.values[0], fitnesses
+    the_best, = tools.selBest(population, 1)
+    return the_best, the_best.fitness.values, fitnesses
 
 
 if __name__ == '__main__':
-    res = list(futures.map(solve, xrange(3)))
-    fitnesses = [fit for sol, fit, fitnesses in res]
+    problem = ProblemLoader('problem2.txt')
+    solut, fitnes, fitnesses = solve()
 
-    print 'Average fitness: %s of %s trials' % (sum(fitnesses) / len(fitnesses), len(fitnesses))
-    print 'Best fitness: %s' % (min(fitnesses),)
+    print 'Pattern is: %s' % (map(lambda x: problem.elementy[x], solut),)
+    print 'Fitness is %s' % (fitnes,)

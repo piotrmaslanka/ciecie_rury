@@ -1,4 +1,5 @@
 from __future__ import division
+
 import random
 
 from deap import base
@@ -12,15 +13,31 @@ class ProblemLoader(object):
         with open(filename, 'rb') as f:
             lines = f.readlines()
 
-        _san = lambda l: int(l.strip())
+        _san = lambda l: float(l.strip())
 
-        self.belka = _san(lines[0])
+        self.belka = int(_san(lines[0]))
 
         elementy = []
-        for i in xrange(0, _san(lines[1])):
+        for i in xrange(0, int(_san(lines[1]))):
             elementy.append(_san(lines[2 + i]))
 
         self.elementy = elementy
+
+
+def mutWTF(individual, indbp_callable):
+    if random.random() < 0.3:
+        return mutRandomShuffle(individual)
+    else:
+        return mutMyShuffle(individual, indbp_callable(individual))
+
+
+def mutRandomShuffle(individual):
+    q = random.randint(0, len(individual) - 1)
+    p = q
+    while p == q:
+        p = random.randint(0, len(individual) - 1)
+
+    individual[p], individual[q] = individual[q], individual[p]
 
 
 def mutMyShuffle(individual, indbp):
