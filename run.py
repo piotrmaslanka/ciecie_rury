@@ -6,20 +6,14 @@ from deap import tools
 
 from problem import ProblemLoader, create_toolbox
 
-POPULATION_SIZE = 300
-WIN_POPULATION_SIZE = 25
-GENERATIONS = 5000
 
-CX_PROB = 0.7
-
-
-def solve(*args):
-    problem = ProblemLoader('problem2.txt')
+def solve(POPULATION_SIZE, WIN_POPULATION_SIZE, CX_PROB, *args):
+    problem = ProblemLoader('problem3.txt')
     toolbox = create_toolbox(problem)
     population = toolbox.population(n=10 * POPULATION_SIZE)
     last_best_fitness, fitness_stuck_for, fitnesses = float('inf'), 0, []
 
-    for i in xrange(0, GENERATIONS):
+    for i in xrange(0, 10000):
         best_fitness = float('inf')
 
         # evaluate the population
@@ -31,7 +25,7 @@ def solve(*args):
 
         fitnesses.append(best_fitness)
 
-        if best_fitness == last_best_fitness:
+        if best_fitness >= last_best_fitness:
             fitness_stuck_for += 1
         else:
             fitness_stuck_for = 0
@@ -58,11 +52,11 @@ def solve(*args):
             del c1.fitness.values
             population.append(c1)
 
-        if fitness_stuck_for > 50:
-            break
-
         if i % 10 == 0:
-            print '%s completed, max fitness is %s, fsf is %s' % (i, best_fitness, fitness_stuck_for)
+            print '%s %s' % (i, best_fitness)
+
+        if fitness_stuck_for > 100:
+            break
 
     for ind, fit in zip(population, map(toolbox.evaluate, population)): ind.fitness.values = fit
 
@@ -71,8 +65,5 @@ def solve(*args):
 
 
 if __name__ == '__main__':
-    problem = ProblemLoader('problem2.txt')
-    solut, fitnes, fitnesses = solve()
-
-    print 'Pattern is: %s' % (map(lambda x: problem.elementy[x], solut),)
-    print 'Fitness is %s' % (fitnes,)
+    best, fitnes, path = solve(350, 30, 0.5)
+    print fitnes

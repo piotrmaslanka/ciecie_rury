@@ -109,7 +109,7 @@ def create_toolbox(problem):
     creator.create("Individual", list, fitness=creator.FitnessMin)
     toolbox = base.Toolbox()
     toolbox.register("evaluate", evaluate)
-    toolbox.register("mate", tools.cxOrdered)
+    toolbox.register("mate", tools.cxPartialyMatched)
     toolbox.register("select", tools.selBest)
     toolbox.register("mutate", lambda x: mutMyShuffle(x, index_shuffle_probability(x)))
     toolbox.register("map", futures.map)
