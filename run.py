@@ -1,6 +1,8 @@
 from __future__ import division
 
 import random
+import sys
+import time
 
 from deap import tools
 
@@ -8,7 +10,7 @@ from problem import ProblemLoader, create_toolbox
 
 
 def solve(POPULATION_SIZE, WIN_POPULATION_SIZE, CX_PROB, *args):
-    problem = ProblemLoader('problem3.txt')
+    problem = ProblemLoader(sys.argv[1])
     toolbox = create_toolbox(problem)
     population = toolbox.population(n=10 * POPULATION_SIZE)
     last_best_fitness, fitness_stuck_for, fitnesses = float('inf'), 0, []
@@ -65,5 +67,7 @@ def solve(POPULATION_SIZE, WIN_POPULATION_SIZE, CX_PROB, *args):
 
 
 if __name__ == '__main__':
+    start = time.clock()
     best, fitnes, path = solve(350, 30, 0.5)
-    print fitnes
+    stop = time.clock()
+    print '%s %s' % (stop - start, fitnes)
