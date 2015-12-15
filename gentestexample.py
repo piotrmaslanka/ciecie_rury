@@ -9,7 +9,7 @@ fname = raw_input('Pass file name')
 stocksize = int(raw_input('Pass stock size'))
 elems = int(raw_input('Pass amount of elements'))
 
-genmin = lambda: (random.random() * 0.55 + 0.05) * stocksize
+genmin = lambda: int((random.random() * 0.55 + 0.05) * stocksize)
 
 of = open(fname, 'w')
 of.write('%s\n%s\n' % (stocksize, elems))

@@ -1,16 +1,15 @@
 from __future__ import division
 
 import random
-import sys
-import time
 
 from deap import tools
+from scoop import futures
 
 from problem import ProblemLoader, create_toolbox
 
 
-def solve(POPULATION_SIZE, WIN_POPULATION_SIZE, CX_PROB, *args):
-    problem = ProblemLoader(sys.argv[1])
+def solve(POPULATION_SIZE, WIN_POPULATION_SIZE, CX_PROB):
+    problem = ProblemLoader('problems/px.txt')
     toolbox = create_toolbox(problem)
     population = toolbox.population(n=10 * POPULATION_SIZE)
     last_best_fitness, fitness_stuck_for, fitnesses = float('inf'), 0, []
@@ -67,7 +66,9 @@ def solve(POPULATION_SIZE, WIN_POPULATION_SIZE, CX_PROB, *args):
 
 
 if __name__ == '__main__':
-    start = time.clock()
-    best, fitnes, path = solve(350, 30, 0.5)
-    stop = time.clock()
-    print '%s %s' % (stop - start, fitnes)
+
+    s = [350, 30, 0.5]
+    outs = futures.map(lambda x: solve(*x), [s, s, s])
+
+    for b, f, p, in outs:
+        print f
