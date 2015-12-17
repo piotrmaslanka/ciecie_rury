@@ -3,13 +3,12 @@ from __future__ import division
 import random
 
 from deap import tools
-from scoop import futures
 
 from problem import ProblemLoader, create_toolbox
 
 
 def solve(POPULATION_SIZE, WIN_POPULATION_SIZE, CX_PROB):
-    problem = ProblemLoader('problems/px.txt')
+    problem = ProblemLoader('problems/pregular.txt')
     toolbox = create_toolbox(problem)
     population = toolbox.population(n=10 * POPULATION_SIZE)
     last_best_fitness, fitness_stuck_for, fitnesses = float('inf'), 0, []
@@ -68,7 +67,4 @@ def solve(POPULATION_SIZE, WIN_POPULATION_SIZE, CX_PROB):
 if __name__ == '__main__':
 
     s = [350, 30, 0.5]
-    outs = futures.map(lambda x: solve(*x), [s, s, s])
-
-    for b, f, p, in outs:
-        print f
+    b, f, p = solve(*s)
