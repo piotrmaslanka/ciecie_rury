@@ -8,7 +8,7 @@ from problem import ProblemLoader, create_toolbox
 
 
 def solve(POPULATION_SIZE, WIN_POPULATION_SIZE, CX_PROB):
-    problem = ProblemLoader('problems/pregular.txt')
+    problem = ProblemLoader('problems/p6000.txt')
     toolbox = create_toolbox(problem)
     population = toolbox.population(n=10 * POPULATION_SIZE)
     last_best_fitness, fitness_stuck_for, fitnesses = float('inf'), 0, []
